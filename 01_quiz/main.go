@@ -20,6 +20,7 @@ func main() {
 
 	f := openFile(quizFile)
 	qq := parseQuestions(f)
+	defer f.Close()
 
 	fmt.Println("")
 	fmt.Println("=================================")
@@ -62,6 +63,7 @@ func play(quiz [][]string, timeOut int) {
 	maxScore := len(quiz)
 
 	gameOverFunc := func() {
+		fmt.Println("\nTime's Up!")
 		gameOver(score, maxScore)
 		os.Exit(0)
 	}
