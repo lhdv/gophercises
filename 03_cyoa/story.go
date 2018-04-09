@@ -37,7 +37,7 @@ func LoadAdventure(file string) Adventure {
 		log.Fatal("Can't parse json file:", file)
 	}
 
-	log.Printf("%+v", adv)
+	// log.Printf("%+v", adv)
 
 	return adv
 }
