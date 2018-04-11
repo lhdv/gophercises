@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 
-	cyoa "github.com/lhdv/gophercises/03_cyoa"
 	"github.com/lhdv/gophercises/03_cyoa/server"
 )
 
@@ -25,6 +24,6 @@ func main() {
 	fmt.Println("***********************************")
 	fmt.Println("")
 
-	cyoa.LoadAdventure(inputFile)
+	// cyoa.LoadAdventure(inputFile)
 	server.Start(srvHost, srvPort)
 }

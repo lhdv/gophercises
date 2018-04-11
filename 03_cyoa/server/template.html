@@ -12,10 +12,11 @@
     <h2>{{.Title}}</h2>
     {{range .Story}}
     <p>{{.}}</p>
-    {{end}}
+    {{end}}    
     <ol>
-        <li><a href="#">Option 1</a></li>
-        <li><a href="#">Option 2</a></li>
+        {{range .Options}}
+        <li><a href="/{{.NextArc}}">{{.Text}}</a></li>
+        {{end}}
     </ol>
 </body>
 </html>
