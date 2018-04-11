@@ -24,13 +24,15 @@ func Start(advFile, host, port string) {
 
 func defaultMux() *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", rootPage)
 	return mux
 }
 
 func mapHandler(adventure cyoa.Adventure, fallback http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		path := strings.TrimLeft(r.URL.Path, "/")
+		if path == "" {
+			path = "intro"
+		}
 
 		log.Println("[LOG] - mapHandler Call " + path)
 		if dest, ok := adventure[path]; ok {
@@ -50,11 +52,13 @@ func buildPage(w http.ResponseWriter, content cyoa.Content) *template.Template {
 	t, err := template.ParseFiles("server/template.html")
 	if err != nil {
 		log.Fatal("[LOG] - Could not parse template file")
+		http.Error(w, "Something went wrong on parsing template...", http.StatusInternalServerError)
 	}
 
 	err = t.Execute(w, content)
 	if err != nil {
 		log.Fatal("[LOG] - Could not execute parsing on template")
+		http.Error(w, "Something went wrong...", http.StatusInternalServerError)
 	}
 
 	return t

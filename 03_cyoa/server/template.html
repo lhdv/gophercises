@@ -5,10 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Choose Your Own Adventure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
 </head>
 <body>
+    <section class="page">
     <h2>{{.Title}}</h2>
     {{range .Story}}
     <p>{{.}}</p>
@@ -18,5 +17,46 @@
         <li><a href="/{{.NextArc}}">{{.Text}}</a></li>
         {{end}}
     </ol>
+    </section>
+    <style>
+        body {
+            font-family: helvetica, arial;
+        }
+        h1 {
+            text-align:center;
+            position:relative;
+        }
+        .page {
+            width: 80%;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            padding: 80px;
+            background: #FFFCF6;
+            border: 1px solid #eee;
+            box-shadow: 0 10px 6px -6px #777;
+        }
+        ol {
+            border-top: 1px dotted #ccc;
+            padding: 10px 0 0 0;
+            -webkit-padding-start: 0;
+        }
+        li {
+            padding-top: 10px;
+        }
+        a,
+        a:visited {
+            text-decoration: none;
+            color: #6295b5;
+        }
+        a:active,
+        a:hover {
+            color: #7792a2;
+        }
+        p {
+            text-indent: 1em;
+        }
+    </style>
 </body>
 </html>
