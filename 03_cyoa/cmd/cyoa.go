@@ -25,5 +25,5 @@ func main() {
 	fmt.Println("")
 
 	// cyoa.LoadAdventure(inputFile)
-	server.Start(srvHost, srvPort)
+	server.Start(inputFile, srvHost, srvPort)
 }

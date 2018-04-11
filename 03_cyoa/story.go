@@ -38,6 +38,7 @@ func LoadAdventure(file string) Adventure {
 	}
 
 	// log.Printf("%+v", adv)
+	log.Println("[LOG] - LoadAdventure Call")
 
 	return adv
 }
