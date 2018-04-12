@@ -23,8 +23,9 @@ func main() {
 	log.Println("[INF] Init application")
 	log.Println("######################")
 
-	file = "ex2.html"
+	file = "ex4.html"
 	f, err := os.Open(file)
+	defer f.Close()
 	if err != nil {
 		log.Fatal("[ERR] Could not open file " + file)
 	}
@@ -34,8 +35,11 @@ func main() {
 		log.Fatal("[ERR] Could not parse file " + file)
 	}
 
-	l := make([]Link, 0)
-	log.Printf("%+v\n", findLinks(doc, &l))
+	ll := make([]Link, 0)
+	ll = findLinks(doc, &ll)
+	for _, l := range ll {
+		log.Printf("%+v\n", l)
+	}
 
 }
 
