@@ -34,8 +34,8 @@ func main() {
 		log.Fatal("[ERR] Could not parse file " + file)
 	}
 
-	l := make([]string, 0)
-	log.Printf("%+q\n", findLinks(doc, &l))
+	l := make([]Link, 0)
+	log.Printf("%+v\n", findLinks(doc, &l))
 
 }
 
@@ -56,13 +56,14 @@ func findLinkText(n *html.Node) string {
 	return ret
 }
 
-func findLinks(n *html.Node, links *[]string) []string {
+func findLinks(n *html.Node, links *[]Link) []Link {
 
 	if n.Type == html.ElementNode && n.Data == "a" {
 		for _, a := range n.Attr {
 			if a.Key == "href" {
 				linkText := findLinkText(n)
-				*links = append(*links, a.Val+";"+linkText)
+				l := Link{Text: linkText, Href: a.Val}
+				*links = append(*links, l)
 				return *links
 			}
 		}
