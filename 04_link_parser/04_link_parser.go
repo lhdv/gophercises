@@ -23,7 +23,7 @@ func main() {
 	log.Println("[INF] Init application")
 	log.Println("######################")
 
-	file = "ex4.html"
+	file = "ex3.html"
 	f, err := os.Open(file)
 	defer f.Close()
 	if err != nil {
@@ -43,6 +43,25 @@ func main() {
 
 }
 
+func findLinks(n *html.Node, links *[]Link) []Link {
+
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, a := range n.Attr {
+			if a.Key == "href" {
+				linkText := findLinkText(n)
+				l := Link{Href: a.Val, Text: linkText}
+				*links = append(*links, l)
+				return *links
+			}
+		}
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		*links = findLinks(c, links)
+	}
+
+	return *links
+}
+
 func findLinkText(n *html.Node) string {
 	ret := ""
 
@@ -58,23 +77,4 @@ func findLinkText(n *html.Node) string {
 	}
 
 	return ret
-}
-
-func findLinks(n *html.Node, links *[]Link) []Link {
-
-	if n.Type == html.ElementNode && n.Data == "a" {
-		for _, a := range n.Attr {
-			if a.Key == "href" {
-				linkText := findLinkText(n)
-				l := Link{Text: linkText, Href: a.Val}
-				*links = append(*links, l)
-				return *links
-			}
-		}
-	}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		*links = findLinks(c, links)
-	}
-
-	return *links
 }
