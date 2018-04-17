@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"unicode"
 
 	"golang.org/x/net/html"
 )
@@ -23,7 +22,7 @@ func main() {
 	log.Println("[INF] Init application")
 	log.Println("######################")
 
-	file = "ex3.html"
+	file = "ex2.html"
 	f, err := os.Open(file)
 	defer f.Close()
 	if err != nil {
@@ -65,9 +64,10 @@ func findLinks(n *html.Node, links *[]Link) []Link {
 func findLinkText(n *html.Node) string {
 	ret := ""
 
-	s := strings.TrimFunc(n.Data, func(r rune) bool {
-		return !unicode.IsLetter(r) && !unicode.IsNumber(r) && !unicode.IsPunct(r)
-	})
+	// 1 - Split a blank separated string into slice
+	// 2 - Join this slice using a separator
+	s := strings.Join(strings.Fields(n.Data), " ")
+
 	if n.Type == html.TextNode && s != "\n" {
 		return s
 	}
