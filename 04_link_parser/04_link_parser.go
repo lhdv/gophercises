@@ -22,7 +22,7 @@ func main() {
 	log.Println("[INF] Init application")
 	log.Println("######################")
 
-	file = "ex2.html"
+	file = "ex3.html"
 	f, err := os.Open(file)
 	defer f.Close()
 	if err != nil {
