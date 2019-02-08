@@ -1,3 +1,4 @@
+// package sitemap
 package main
 
 import (
@@ -28,11 +29,11 @@ func main() {
 
 	flag.Parse()
 
-	sitemap = fetchLinks(site)
-	for k := range sitemap {
-		level1 = fetchLinks(k)
-		log.Println(k, "->", level1)
-	}
+	// sitemap = fetchLinks(site)
+	// for k := range sitemap {
+	// 	level1 = fetchLinks(k)
+	// 	log.Println(k, "->", level1)
+	// }
 
 }
 
@@ -42,17 +43,19 @@ func fetchLinks(site string) map[string]string {
 
 	domain, err := parseDomain(site)
 	if err != nil {
-		log.Fatal("[ERR] - ", err)
+		log.Fatal("[ERR][parseDomain] - ", err)
 	}
 
 	resp, err := http.Get(site)
 	if err != nil {
-		log.Fatal("[ERR] - ", err)
+		log.Fatal("[ERR][http.Get] - ", err)
 	}
+
+	defer resp.Body.Close()
 
 	doc, err := html.Parse(resp.Body)
 	if err != nil {
-		log.Fatal("[ERR] - ", err)
+		log.Fatal("[ERR][html.Parse] - ", err)
 	}
 
 	ll := make([]Link, 0)
@@ -60,7 +63,7 @@ func fetchLinks(site string) map[string]string {
 	for _, l := range ll {
 		link, err := parseDomain(l.Href)
 		if err != nil {
-			log.Fatal("[ERR] - ", err)
+			log.Fatal("[ERR][parseDomain] - ", err)
 		}
 
 		if link == domain {
@@ -80,6 +83,9 @@ func parseDomain(site string) (string, error) {
 	return urlParsed.Hostname(), err
 }
 
+//
+// From previous exercise
+//
 func findLinks(n *html.Node, links *[]Link) []Link {
 
 	if n.Type == html.ElementNode && n.Data == "a" {
