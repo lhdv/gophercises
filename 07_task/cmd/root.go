@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -12,9 +11,6 @@ var rootCmd = &cobra.Command{
 	Use:   "task",
 	Short: "Task manages your TODO list",
 	Long:  "Task manages and stores your TODO list to keep you in control of your life",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Root command")
-	},
 }
 
 // Execute parses and runs your CLI
