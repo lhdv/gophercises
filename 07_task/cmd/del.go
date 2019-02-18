@@ -1,18 +1,19 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"strconv"
-	"time"
 
 	"github.com/lhdv/gophercises/07_task/model"
+
 	"github.com/spf13/cobra"
 )
 
-var doCmd = &cobra.Command{
-	Use:   "do",
-	Short: "Completes tasks",
-	Long:  "Mark one or more tasks as completed",
+var delCmd = &cobra.Command{
+	Use:   "del [task id]",
+	Short: "Deletes a task from your list",
+	Long:  "Remove completly a task from your list, no matter if it was done or not.",
 	Run: func(cmd *cobra.Command, args []string) {
 
 		ids := make([]int, len(args))
@@ -30,17 +31,19 @@ var doCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		t, err := db.Complete(ids, time.Now())
-		if err != nil {
-			log.Fatalln(err)
+		for _, id := range ids {
+			err := db.Delete(id)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			fmt.Println("Task", id, "was deleted from your list")
 		}
 
-		log.Println(t)
-
 		db.Close()
+
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(doCmd)
+	rootCmd.AddCommand(delCmd)
 }
