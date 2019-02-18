@@ -26,21 +26,22 @@ var delCmd = &cobra.Command{
 			}
 		}
 
-		db, err := model.OpenDatabase("")
+		ss, err := model.NewStorageService(model.WithBoltDB(""),
+			model.WithBucket(""),
+			model.WithTask())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
 		for _, id := range ids {
-			err := db.Delete(id)
+			err := ss.Task.Delete(id)
 			if err != nil {
 				log.Fatalln(err)
 			}
 			fmt.Println("Task", id, "was deleted from your list")
 		}
 
-		db.Close()
-
+		ss.Close()
 	},
 }
 

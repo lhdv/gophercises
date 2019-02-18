@@ -25,19 +25,21 @@ var doCmd = &cobra.Command{
 			}
 		}
 
-		db, err := model.OpenDatabase("")
+		ss, err := model.NewStorageService(model.WithBoltDB(""),
+			model.WithBucket(""),
+			model.WithTask())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		t, err := db.Complete(ids, time.Now())
+		t, err := ss.Task.Complete(ids, time.Now())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		log.Println(t)
+		log.Println("[CMD DO]", t)
 
-		db.Close()
+		ss.Close()
 	},
 }
 

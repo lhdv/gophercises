@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/boltdb/bolt"
+)
 
 // Task represents a task in a TODO list
 type Task struct {
@@ -10,33 +14,47 @@ type Task struct {
 	CompletedAt time.Time
 }
 
-// Add(desc string, date time.Time) (*Task, error)
-// Get(id int) (*Task, error)
-// Complete(ids []int, date time.Time) ([]Task, error)
-// Delete(id int) error
-// List() ([]Task, error)
-
-// CreateTask put a task in a TODO list
-func CreateTask(task string) (*Task, error) {
-	return nil, nil
+// TaskStorage is an interface to define what a Task model can do
+type TaskStorage interface {
+	Add(desc string, date time.Time) (*Task, error)
+	Get(id int) (*Task, error)
+	Complete(ids []int, date time.Time) ([]Task, error)
+	Delete(id int) error
+	List() ([]Task, error)
 }
 
-// ListTasks get all tasks and list them
-func ListTasks() ([]Task, error) {
-	return nil, nil
+type taskService struct {
+	db Database
 }
 
-// GetTask get a specific task by its list order
-func GetTask(id int) (*Task, error) {
-	return nil, nil
+// NewTaskService TODO
+func NewTaskService(db *bolt.DB) TaskStorage {
+	return &taskService{
+		db: Database{DB: db},
+	}
 }
 
-// DeleteTask get a specific task by its list order
-func DeleteTask(id int) error {
-	return nil
+// Add TODO
+func (t *taskService) Add(desc string, date time.Time) (*Task, error) {
+	return t.db.Add(desc, date)
 }
 
-// CompleteTasks mark tasks as done on an  given time
-func CompleteTasks(ids []int, when time.Time) ([]Task, error) {
-	return nil, nil
+// Get TODO
+func (t *taskService) Get(id int) (*Task, error) {
+	return t.db.Get(id)
+}
+
+// Complete TODO
+func (t *taskService) Complete(ids []int, date time.Time) ([]Task, error) {
+	return t.db.Complete(ids, date)
+}
+
+// Delete TODO
+func (t *taskService) Delete(id int) error {
+	return t.db.Delete(id)
+}
+
+// List TODO
+func (t *taskService) List() ([]Task, error) {
+	return t.db.List()
 }

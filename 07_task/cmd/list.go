@@ -14,12 +14,14 @@ var listCmd = &cobra.Command{
 	Long:  "Show all yout TODO list order by the last task added to the first",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		db, err := model.OpenDatabase("")
+		ss, err := model.NewStorageService(model.WithBoltDB(""),
+			model.WithBucket(""),
+			model.WithTask())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		ts, err := db.List()
+		ts, err := ss.Task.List()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -28,7 +30,7 @@ var listCmd = &cobra.Command{
 			fmt.Printf("%d. %+v\n", i+1, t)
 		}
 
-		db.Close()
+		ss.Close()
 	},
 }
 

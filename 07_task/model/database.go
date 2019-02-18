@@ -3,7 +3,6 @@ package model
 import (
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -11,7 +10,7 @@ import (
 	"github.com/boltdb/bolt"
 )
 
-const taskBucket = "TaskBucket"
+var taskBucket = []byte("TaskBucket")
 
 // Just to check if Database struct implements TaskStorage interface
 var _ TaskStorage = &Database{}
@@ -19,42 +18,6 @@ var _ TaskStorage = &Database{}
 // Database is the layer that talks direct to the BoltDB database
 type Database struct {
 	DB *bolt.DB
-}
-
-// OpenDatabase opens a BoltDB file
-func OpenDatabase(path string) (*Database, error) {
-	var err error
-
-	if strings.TrimSpace(path) == "" {
-		path = "tasks.db"
-	}
-
-	db, err := bolt.Open(path, 0600, nil)
-	if err != nil {
-		log.Println("[DATABASE][ERROR] - OpenDatabase:", err)
-		return nil, err
-	}
-
-	err = db.Update(func(tx *bolt.Tx) error {
-		_, err = tx.CreateBucketIfNotExists([]byte(taskBucket))
-		if err != nil {
-			return fmt.Errorf("create bucket: %s", err)
-		}
-		return nil
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &Database{
-		DB: db,
-	}, nil
-}
-
-// Close a BoltDB database
-func (d *Database) Close() {
-	d.DB.Close()
 }
 
 //

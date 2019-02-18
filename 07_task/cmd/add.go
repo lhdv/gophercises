@@ -16,22 +16,24 @@ var addCmd = &cobra.Command{
 	Long:  "Add a new task on top of your list",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		db, err := model.OpenDatabase("")
+		ss, err := model.NewStorageService(model.WithBoltDB(""),
+			model.WithBucket(""),
+			model.WithTask())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		t, err := db.Add(strings.Join(args, " "), time.Now())
+		t, err := ss.Task.Add(strings.Join(args, " "), time.Now())
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		log.Println("[CMD]", t)
+		log.Println("[CMD ADD]", t)
 
-		tt, err := db.Get(1)
+		tt, err := ss.Task.Get(1)
 		log.Println("[CMD GET]", tt)
 
-		db.Close()
+		ss.Close()
 	},
 }
 
