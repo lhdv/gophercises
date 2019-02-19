@@ -33,13 +33,35 @@ var delCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		for _, id := range ids {
-			err := ss.Task.Delete(id)
-			if err != nil {
-				log.Fatalln(err)
-			}
-			fmt.Println("Task", id, "was deleted from your list")
+		tasks, err := ss.Task.List()
+		if err != nil {
+			log.Fatalln(err)
 		}
+
+		for _, id := range ids {
+			if id <= 0 && id > len(tasks) {
+				log.Println("Invalid id:", id)
+				continue
+			}
+
+			task := tasks[id-1]
+			if task.ID != 0 {
+				err := ss.Task.Delete(task.ID)
+				if err != nil {
+					log.Fatalln(err)
+				}
+				fmt.Printf("Task %02d - %s was deleted from your list\n", id, task.Desc)
+			}
+
+		}
+
+		// for _, id := range ids {
+		// 	err := ss.Task.Delete(id)
+		// 	if err != nil {
+		// 		log.Fatalln(err)
+		// 	}
+		// 	fmt.Println("Task", id, "was deleted from your list")
+		// }
 
 		ss.Close()
 	},

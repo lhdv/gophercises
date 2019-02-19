@@ -30,9 +30,6 @@ var addCmd = &cobra.Command{
 
 		log.Println("[CMD ADD]", t)
 
-		tt, err := ss.Task.Get(1)
-		log.Println("[CMD GET]", tt)
-
 		ss.Close()
 	},
 }

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -32,12 +33,33 @@ var doCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		t, err := ss.Task.Complete(ids, time.Now())
+		tasks, err := ss.Task.List()
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		log.Println("[CMD DO]", t)
+		tasksIDs := make([]int, 0, len(tasks))
+		for _, id := range ids {
+			if id <= 0 && id > len(tasks) {
+				log.Println("Invalid id:", id)
+				continue
+			}
+
+			task := tasks[id-1]
+			if task.ID != 0 {
+				tasksIDs = append(tasksIDs, task.ID)
+			}
+
+		}
+
+		completedTasks, err := ss.Task.Complete(tasksIDs, time.Now())
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		for _, t := range completedTasks {
+			fmt.Printf("Task \"%s\" set as completed on %q\n", t.Desc, time.Now().Format("02/01/2006 15:04:05"))
+		}
 
 		ss.Close()
 	},
