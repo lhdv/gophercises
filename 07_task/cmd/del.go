@@ -55,14 +55,6 @@ var delCmd = &cobra.Command{
 
 		}
 
-		// for _, id := range ids {
-		// 	err := ss.Task.Delete(id)
-		// 	if err != nil {
-		// 		log.Fatalln(err)
-		// 	}
-		// 	fmt.Println("Task", id, "was deleted from your list")
-		// }
-
 		ss.Close()
 	},
 }

@@ -58,7 +58,7 @@ var doCmd = &cobra.Command{
 		}
 
 		for _, t := range completedTasks {
-			fmt.Printf("Task \"%s\" set as completed on %q\n", t.Desc, time.Now().Format("02/01/2006 15:04:05"))
+			fmt.Printf("Task \"%s\" set as completed on %q\n", t.Desc, time.Now().Format("2006-01-02 15:04:05"))
 		}
 
 		ss.Close()

@@ -23,12 +23,10 @@ var addCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		t, err := ss.Task.Add(strings.Join(args, " "), time.Now())
+		_, err = ss.Task.Add(strings.Join(args, " "), time.Now())
 		if err != nil {
 			log.Fatalln(err)
 		}
-
-		log.Println("[CMD ADD]", t)
 
 		ss.Close()
 	},

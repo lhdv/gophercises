@@ -12,7 +12,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Lists all tasks",
-	Long:  "Show all yout TODO list order by the last task added to the first",
+	Long:  "Show all your TODO list order by the last task added to the first",
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var noTime time.Time
@@ -29,13 +29,23 @@ var listCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		fmt.Printf("===== TODO LIST =====\n\n")
+		fmt.Printf("\n======= TODO TASKS  =======\n\n")
 
+		// List Todo tasks
 		for i, t := range tasks {
 			if t.CompletedAt == noTime {
 				fmt.Printf("%02d. %s.\n", i+1, t.Desc)
-			} else {
-				fmt.Printf("%02d. COMPLETED - %s.\n", i+1, t.Desc)
+			}
+		}
+
+		fmt.Printf("\n===== COMPLETED TASKS =====\n\n")
+
+		// List Completed tasks
+		completedIdx := 1
+		for _, t := range tasks {
+			if t.CompletedAt != noTime {
+				fmt.Printf("%02d. %s. On %s\n", completedIdx, t.Desc, t.CompletedAt.Format("2006-01-02 15:04:05"))
+				completedIdx++
 			}
 		}
 

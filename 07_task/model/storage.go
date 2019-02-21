@@ -8,16 +8,18 @@ import (
 	"github.com/boltdb/bolt"
 )
 
-// StorageConfig TODO
+// StorageConfig type to be returned by the config functions that implements
+// the dependency logic
 type StorageConfig func(*StorageService) error
 
-// StorageService TODO
+// StorageService struct to group all dependencies to handle storage
 type StorageService struct {
 	Task TaskStorage
 	db   *bolt.DB
 }
 
-// NewStorageService TODO
+// NewStorageService call all config functions and return a StorageService
+// containing a Task(TaskStorage) responsible to CRUD the tasks
 func NewStorageService(cfgs ...StorageConfig) (*StorageService, error) {
 	var storageSvc StorageService
 
@@ -31,12 +33,12 @@ func NewStorageService(cfgs ...StorageConfig) (*StorageService, error) {
 	return &storageSvc, nil
 }
 
-// Close TODO
+// Close a database connection
 func (ss *StorageService) Close() error {
 	return ss.db.Close()
 }
 
-// WithBoltDB TODO
+// WithBoltDB is a config function to specify how open a BoltDB connection
 func WithBoltDB(dbfile string) StorageConfig {
 	return func(ss *StorageService) error {
 		if strings.TrimSpace(dbfile) == "" {
@@ -55,7 +57,7 @@ func WithBoltDB(dbfile string) StorageConfig {
 	}
 }
 
-// WithBucket TODO
+// WithBucket is a config function to set a bucket in BoltDB
 func WithBucket(bucket string) StorageConfig {
 	return func(ss *StorageService) error {
 
@@ -78,7 +80,7 @@ func WithBucket(bucket string) StorageConfig {
 	}
 }
 
-// WithTask TODO
+// WithTask is a config function to set a TaskStorage to a StorageConfig
 func WithTask() StorageConfig {
 	return func(ss *StorageService) error {
 		ss.Task = NewTaskService(ss.db)
